@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Express HTML</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <div style="margin:100px;">
+    <div class="jumbotron"  style="padding:40px;">
+      <h2><b>Welcome to Climacell's Weather API!</b></h2>
+      <p><b>In order to pull forcast data for a specific location, you may use one of the following endpoints:</b></p>
+      <p><b>To get all forcasts for a spcific location with known latitude and longitude values go to:</b>
+          <a>https://climacell-weather-api.herokuapp.com/weather/data?lat=X&lon=Y</a>
+      </p>
+      <p><b>To get forcasts metrics for a specific location with known latitude and longitude values go to:</b>
+        <a>https://climacell-weather-api.herokuapp.com/weather/summarize?lat=X&lon=Y</a> 
+     </p>
+      <p><b>Notice you must replace X and Y in the query string with your lat and lon values.</b>
+         For example: <a>https://climacell-weather-api.herokuapp.com/weather/data?lat=-180.0&lon=-90.0</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

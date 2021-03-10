@@ -4,6 +4,9 @@ const {reformatDocument, computeMetrics} = require('./utils');
 const config = require('../resources/config');
 const mongodb = require("mongodb").MongoClient;
 const csvtojson = require("csvtojson");
+app.set('views','./views');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
 // upload csv file to db
 function uploadCSV(filePath) {
@@ -28,7 +31,7 @@ function uploadCSV(filePath) {
 //initiate server
 function runServer(){
     // upon termination of server, close db connection
-    process.on('SIGINT', () => {
+    process.on('SIGTERM', () => {
         app.locals.client.close();
         process.exit();
     });
@@ -97,6 +100,9 @@ app.get('/weather/summarize', async (req, res) => {
     })
     .catch(error => console.error(error));
 });
-  
+
+app.get('*', function(req, res) {
+    res.status(200).render("landing.html");
+});
 
 init(); //init DB (if needed) + server
