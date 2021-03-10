@@ -27,6 +27,11 @@ function uploadCSV(filePath) {
 
 //initiate server
 function runServer(){
+    // upon termination of server, close db connection
+    process.on('SIGINT', () => {
+        app.locals.client.close();
+        process.exit();
+    });
     // setup express
     app.use(express.json()); //activate the bodyparser middleware
     app.use(express.urlencoded({ extended: false }));
@@ -39,6 +44,7 @@ async function init() {
     // create shared db and collection connections
     await mongodb.connect(config.getURI(), { useNewUrlParser: true, useUnifiedTopology: true })
     .then(client => {
+        app.locals.client = client;
         app.locals.db = client.db('forcastDB');
         app.locals.collection = app.locals.db.collection('forcasts');
     })
@@ -91,5 +97,6 @@ app.get('/weather/summarize', async (req, res) => {
     })
     .catch(error => console.error(error));
 });
+  
 
 init(); //init DB (if needed) + server
