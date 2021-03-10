@@ -88,7 +88,7 @@ app.get('/weather/data', async (req, res) => {
             res.status(200).json(filteredArr);
         }
         else{
-            res.render("nodata.html");
+            res.render("noData.html");
         }
     })
     .catch(error => console.error(error));
@@ -104,7 +104,7 @@ app.get('/weather/summarize', async (req, res) => {
             res.status(200).json(metrics);
         }
         else{
-            res.render("nodata.html");
+            res.render("noData.html");
         }
     })
     .catch(error => console.error(error));
