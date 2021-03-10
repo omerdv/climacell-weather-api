@@ -83,14 +83,12 @@ app.get('/weather/data', async (req, res) => {
     collection.find({ lat: req.query.lat, lon: req.query.lon })
     .toArray()
     .then(response => {
-        let filteredArr =  response.map(x => reformatDocument(x));
-        console.log(filteredArr);
+        let filteredArr = response.map(x => reformatDocument(x));
         if(filteredArr.length > 0) {
             res.status(200).json(filteredArr);
         }
         else{
-            console.log(filteredArr);
-            res.status(204).render("noData.html");
+            res.render("nodata.html");
         }
     })
     .catch(error => console.error(error));
@@ -102,11 +100,11 @@ app.get('/weather/summarize', async (req, res) => {
     .toArray()
     .then(response => {
         let metrics = computeMetrics(response);
-        if(metrics['max']['Temperature'] != null){
+        if(metrics['max']['Temperature'] != -Infinity){
             res.status(200).json(metrics);
         }
         else{
-            res.status(204).render("noData.html");
+            res.render("nodata.html");
         }
     })
     .catch(error => console.error(error));
