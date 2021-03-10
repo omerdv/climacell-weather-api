@@ -11,12 +11,4 @@ mongodb.connect(config.getURI(),{ useNewUrlParser: true, useUnifiedTopology: tru
       dbClient = client;
   });
 
-await mongodb
-  .connect(config.getURI(), { useNewUrlParser: true, poolSize: 10 })
-  .then(client => {
-    let db = client.db('forcastDB');
-    let collection = db.collection('forcasts');
-  })
-  .catch(error => console.error(error));
-
 module.exports = dbClient;
