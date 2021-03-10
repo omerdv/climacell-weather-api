@@ -68,6 +68,7 @@ async function init() {
             }
             else{
                 console.log("Error in uploding csv files\n");
+                app.locals.client.close();
                 process.exit(1);
             }
         });
@@ -84,7 +85,7 @@ app.get('/weather/data', async (req, res) => {
     .toArray()
     .then(response => {
         let filteredArr = response.map(x => reformatDocument(x));
-        if(filteredArr.length > 0) {
+        if(filteredArr.length > 0) {    // if relevant docs found in db
             res.status(200).json(filteredArr);
         }
         else{
@@ -100,7 +101,7 @@ app.get('/weather/summarize', async (req, res) => {
     .toArray()
     .then(response => {
         let metrics = computeMetrics(response);
-        if(metrics['max']['Temperature'] != -Infinity){
+        if(metrics['max']['Temperature'] != -Infinity){ // if relevant docs found in db
             res.status(200).json(metrics);
         }
         else{
