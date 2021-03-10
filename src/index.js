@@ -14,15 +14,14 @@ function uploadCSV(filePath) {
         csvtojson({noheader: false, headers: ['lat','lon', 'forecastTime', 'Temperature', 'Precipitation']})
         .fromFile(filePath)
         .then((csvData) => {
-            console.log(csvData[0]);
-                app.locals.collection
-                .insertMany(csvData, (err, res) => {
-                    if (err) {
-                        console.error(err);
-                        reject(false);
-                    };
-                    console.log(`Inserted: ${res.insertedCount} rows`);
-                    resolve(true);
+            app.locals.collection
+            .insertMany(csvData, (err, res) => {
+                if (err) {
+                    console.error(err);
+                    reject(false);
+                };
+                console.log(`Inserted: ${res.insertedCount} rows`);
+                resolve(true);
             });
         });
     });
@@ -84,8 +83,13 @@ app.get('/weather/data', async (req, res) => {
     collection.find({ lat: req.query.lat, lon: req.query.lon })
     .toArray()
     .then(response => {
-        let filteredArr = response.map(x => reformatDocument(x))
-        res.status(200).json(filteredArr);
+        let filteredArr = response.map(x => reformatDocument(x));
+        if(filterArr.length > 0) {
+            res.status(200).json(filteredArr);
+        }
+        else{
+            res.status(204).send("No forcasts available for the requested location.");
+        }
     })
     .catch(error => console.error(error));
 });
@@ -96,7 +100,12 @@ app.get('/weather/summarize', async (req, res) => {
     .toArray()
     .then(response => {
         let metrics = computeMetrics(response);
-        res.status(200).json(metrics);
+        if(metrics['max']['Temperature'] != null){
+            res.status(200).json(metrics);
+        }
+        else{
+            res.status(204).send("No forcasts available for the requested location.");
+        }
     })
     .catch(error => console.error(error));
 });
