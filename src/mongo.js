@@ -1,25 +1,22 @@
-const mongoose = require('mongoose');
+const mongodb = require("mongodb").MongoClient;
+const config = require('../resources/config');
 
-// define forecast Schema for mongoose
-const forcastSchema = new mongoose.Schema({
-    lat: {
-        type: String // on querying make sure json output is not a string!
-    },
-    lon: {
-        type: String // on querying make sure json output is not a string!
-    },
-    forecastTime: {
-      type: String
-    },
-    Temperature: {
-      type: String
-    },
-    Precipitation: {
-        type: String
-    }
+let dbClient;
 
-});
+mongodb.connect(config.getURI(),{ useNewUrlParser: true, useUnifiedTopology: true },
+  (err, client) => {
+      if (err) {
+          console.error(err);
+      };
+      dbClient = client;
+  });
 
-const forecastModel = mongoose.model('Forcast', forcastSchema);
-  
-module.exports = forecastModel;
+await mongodb
+  .connect(config.getURI(), { useNewUrlParser: true, poolSize: 10 })
+  .then(client => {
+    let db = client.db('forcastDB');
+    let collection = db.collection('forcasts');
+  })
+  .catch(error => console.error(error));
+
+module.exports = dbClient;
