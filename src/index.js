@@ -83,12 +83,14 @@ app.get('/weather/data', async (req, res) => {
     collection.find({ lat: req.query.lat, lon: req.query.lon })
     .toArray()
     .then(response => {
-        let filteredArr = response.map(x => reformatDocument(x));
-        if(filterArr.length > 0) {
+        let filteredArr =  response.map(x => reformatDocument(x));
+        console.log(filteredArr);
+        if(filteredArr.length > 0) {
             res.status(200).json(filteredArr);
         }
         else{
-            res.status(204).send("No forcasts available for the requested location.");
+            console.log(filteredArr);
+            res.status(204).render("noData.html");
         }
     })
     .catch(error => console.error(error));
@@ -104,7 +106,7 @@ app.get('/weather/summarize', async (req, res) => {
             res.status(200).json(metrics);
         }
         else{
-            res.status(204).send("No forcasts available for the requested location.");
+            res.status(204).render("noData.html");
         }
     })
     .catch(error => console.error(error));
