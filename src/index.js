@@ -27,6 +27,44 @@ function uploadCSV(filePath) {
     });
 }
 
+
+// function nearestFloat(inputFloat) {
+
+//     let roundedNum = Math.round(inputFloat);
+//     let diff = inputFloat - roundedNum;
+
+//     if( diff => 0.25 && diff < 0.75){
+//         return (roundedNum + 0.5);
+//     }
+
+//     else if(diff => 0.75){
+//         return float(roundedNum+1);
+//     }
+//     else{
+//         return float(roundedNum);
+//     }
+
+// }
+
+// function testNearestFloat(){
+
+//     let n1 = 1.3;
+//     let n2 = 1.6;
+//     let n3 = 1.8;
+
+//     if(nearestFloat(n1) == 1.0){
+//         if(nearestFloat(n1) == 1.0)
+
+//     }
+
+
+
+
+
+// }
+
+
+
 //initiate server
 function runServer(){
     // upon termination of server, close db connection
@@ -81,7 +119,22 @@ async function init() {
 // setup endpoints
 app.get('/weather/data', async (req, res) => {
     const collection = app.locals.collection; //use shared connection
-    collection.find({ lat: req.query.lat, lon: req.query.lon })
+
+    let latInput = parseFloat(req.query.lat).toString();
+    let lonInput = parseFloat(req.query.lon).toString();
+
+    let latSplit = latInput.split('').filter(x => x == '.');
+    let lotSplit = lonInput.split('').filter(x => x == '.');
+
+    if(latSplit.length == 0){
+        latInput = latInput +".0";
+    }
+
+    if(lotSplit.length == 0){
+        lonInput = lonInput +".0";
+    }
+
+    collection.find({ lat: `${latInput}` , lon: `${lonInput}` })
     .toArray()
     .then(response => {
         let filteredArr = response.map(x => reformatDocument(x));
@@ -97,7 +150,24 @@ app.get('/weather/data', async (req, res) => {
 
 app.get('/weather/summarize', async (req, res) => {
     const collection = app.locals.collection; //use shared connection
-    collection.find({ lat: req.query.lat, lon: req.query.lon })
+
+    let latInput = parseFloat(req.query.lat).toString();
+    let lonInput = parseFloat(req.query.lon).toString();
+
+    let latSplit = latInput.split('').filter(x => x == '.');
+    let lotSplit = lonInput.split('').filter(x => x == '.');
+
+    if(latSplit.length == 0){
+        latInput = latInput +".0";
+    }
+
+    if(lotSplit.length == 0){
+        lonInput = lonInput +".0";
+    }
+
+    collection.find({ lat: `${latInput}` , lon: `${lonInput}` })
+
+
     .toArray()
     .then(response => {
         let metrics = computeMetrics(response);
